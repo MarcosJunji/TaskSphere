@@ -14,7 +14,6 @@ function App() {
   const [filter, setFilter] = useState("All");
   const [sort, setSort] = useState("Asc");
 
-  // Verifica se o localStorage está disponível
   const isLocalStorageAvailable = () => {
     try {
       const test = "__test__";
@@ -26,7 +25,6 @@ function App() {
     }
   };
 
-  // Carrega as tarefas salvas do localStorage ao montar o componente
   useEffect(() => {
     if (isLocalStorageAvailable()) {
       const savedTodos = JSON.parse(localStorage.getItem('todos')) || [];
@@ -34,20 +32,20 @@ function App() {
     }
   }, []);
 
-  // Salva as tarefas no localStorage sempre que a lista de todos é atualizada
   useEffect(() => {
     if (isLocalStorageAvailable()) {
       localStorage.setItem('todos', JSON.stringify(todos));
     }
   }, [todos]);
 
-  const addTodo = (text, category) => {
+  const addTodo = (text, category, priority) => {
     setTodos((prevTodos) => [
       ...prevTodos,
       {
         id: Math.floor(Math.random() * 10000),
         text,
         category,
+        priority,
         isCompleted: false,
       },
     ]);
@@ -65,33 +63,39 @@ function App() {
     );
   };
 
-  return ( 
+  return (
     <div className="app">
       <Counter />
       <h1>Minhas Tarefas</h1>
-      <Search search={search} setSearch={setSearch}/>
-      <Filter filter={filter} setFilter={setFilter} setSort={setSort}/>
+      <Search search={search} setSearch={setSearch} />
+      <Filter filter={filter} setFilter={setFilter} setSort={setSort} />
       <div className="todo-list">
         {todos
-          .filter((todo) => filter === "All" 
-            ? true 
-            : filter === "Completed" 
-            ? todo.isCompleted 
-            : !todo.isCompleted
+          .filter((todo) => filter === "All"
+            ? true
+            : filter === "Completed"
+              ? todo.isCompleted
+              : !todo.isCompleted
           )
           .filter((todo) =>
             todo.text.toLowerCase().includes(search.toLowerCase())
           )
-          .sort((a, b) => 
-            sort === "Asc" 
-              ? a.text.localeCompare(b.text) 
-              : b.text.localeCompare(a.text)
-          )
+          .sort((a, b) => {
+            const priorityOrder = { "Alta": 1, "Média": 2, "Baixa": 3 };
+            if (priorityOrder[a.priority] !== priorityOrder[b.priority]) {
+              return sort === "Asc"
+                ? priorityOrder[a.priority] - priorityOrder[b.priority]
+                : priorityOrder[b.priority] - priorityOrder[a.priority];
+            }
+            return sort === "Asc"
+              ? a.text.localeCompare(b.text)
+              : b.text.localeCompare(a.text);
+          })
           .map((todo) => (
-            <Todo 
-              key={todo.id} 
-              todo={todo} 
-              removeTodo={removeTodo} 
+            <Todo
+              key={todo.id}
+              todo={todo}
+              removeTodo={removeTodo}
               completeTodo={completeTodo}
             />
           ))}

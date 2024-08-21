@@ -12,9 +12,9 @@ const Filter = ({ filter, setFilter, setSort }) => {
                   </select>
               </div>
               <div>
-                  <p>Ordem alfabética</p>
-                  <button onClick={() => setSort("Asc")} className="btn-filter">Asc</button>
-                  <button onClick={() => setSort("Desc")} className="btn-filter">Desc</button>
+                  <p>Prioridade:</p>
+                  <button onClick={() => setSort("Asc")} className="btn-filter">Maior</button>
+                  <button onClick={() => setSort("Desc")} className="btn-filter">Menor</button>
               </div>
           </div>
       </div>

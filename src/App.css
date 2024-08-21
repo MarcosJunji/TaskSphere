@@ -49,7 +49,11 @@ h1 {
   transition: background-color 0.3s ease, transform 0.2s;
   /* Ajuste de largura consistente */
   box-sizing: border-box;
-  
+}
+
+.todo .priority {
+  font-weight: bold;
+  color: #ff6347; /* Cor personalizada para a prioridade */
 }
 
 .todo-form button {
