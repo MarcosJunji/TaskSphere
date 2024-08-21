@@ -3,7 +3,7 @@ import { useState } from 'react';
 export const TodoForm = ({ addTodo }) => {
     const [value, setValue] = useState ("");
     const [category, setCategory] = useState ("");
-    const [priority, setPriority] = useState("Média");
+    const [priority, setPriority] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
